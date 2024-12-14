@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:09:05 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/13 21:39:39 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/14 19:08:45 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ size_t	ft_strlen(const char *s)
 		i++;
 	return (i);
 }
+
 
 char	*ft_strjoin(char *s1, char *s2)
 {
@@ -45,50 +46,11 @@ char	*ft_strjoin(char *s1, char *s2)
 		y++;
 	}
 	dest[i] = '\0';
-	free(s1);
+	ft_free(s1);
+	ft_free(s2);
 	return (dest);
 }
 
-size_t	check_char(char *buffer)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < BUFFER_SIZE)
-	{
-		if (buffer[i] == '\n' || buffer[i] == '\0')
-		{
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-char *justoneline(char *str)
-{
-	char *dest;
-	size_t	i;
-	size_t	j;
-	
-	dest = malloc(sizeof(char) * ft_strlen(str) + 1);
-	i = 0;
-	j = 0;
-	while (str[i] && str[i] != '\n')
-	{
-		dest[i] = str[i];
-		i++;
-	}
-	dest[i] = '\n';
-	if (str[i] == '\n')
-	{
-		i++;
-		while (str[i])
-			str[j++] = str[i++];
-	}
-	str[j] = '\0';
-	return (dest);
-}
 
 
 

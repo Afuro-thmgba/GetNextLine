@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/13 21:50:46 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/14 19:52:28 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,52 +18,94 @@ char	*get_next_line(int fd)
 	char static	*str = NULL;
 	char		*buffer;
 	char		*dest;
-	int			bytes_read;
+	int			bite_read;
 
+	str = malloc(BUFFER_SIZE * sizeof(char) + 1);
 	if (!str)
-		str = (char *)malloc(sizeof(char) * BUFFER_SIZE);
-	if (!str)
-		return (NULL);
-	buffer = (char *)malloc(sizeof(char) * BUFFER_SIZE);
+		return (ft_free(str), NULL);
+	buffer = malloc(BUFFER_SIZE * sizeof(char) + 1);
 	if (!buffer)
-		return (NULL);
-	while (1)
+		return (ft_free(str), NULL);
+	while(1)
 	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == 0 && ft_strlen(str) == 0)
+		bite_read = read (fd, buffer, BUFFER_SIZE);
+		buffer[bite_read] = '\0';
+		if (bite_read == 0 && ft_strlen(str) == 0)
+			return (ft_free(buffer), ft_free(str), NULL);
+		if (str[0] == '\0')
+			ft_buffertostr(str, buffer);
+		if (checkchar(buffer) == 1)
 		{
-			free(str);
-			return (NULL);
+			dest = ft_keeptherest(str);
+			return (dest);
 		}
-		if (check_char(buffer) == 1 && str[0] == '\0')
-			ft_strmove(buffer, str);
-		else if (check_char(buffer) == 1 && str[0] != '\0')
-		{
-			dest = justoneline(str);
-			break ;
-		}
-		str = ft_strjoin(str, buffer);
+		if (buffer)
+			str = ft_strjoin(str, buffer);
 	}
-	return (dest);
+	
 }
 
-void ft_strmove(char *src, char *dest)
+void ft_free(char *str)
+{
+	if (str)
+	{
+		free(str);
+		str = NULL;
+	}
+}
+
+void ft_buffertostr(char *str, char* buffer)
 {
 	size_t	i;
 
 	i = 0;
-	while (src[i])
+
+	while (buffer[i])
 	{
-		dest[i] = src[i];
+		str[i] = buffer[i];
 		i++;
 	}
-	i = 0;
-	while (src[i])
-	{
-		src[i] = '\0';
-		i++;
-	}
+	str[i] = '\0';
 }
+
+char *ft_keeptherest(char *str)
+{
+	char *dest;
+	size_t	i;
+	size_t	j;
+	
+	dest = malloc(sizeof(char) * ft_strlen(str) + 1);
+	if (!dest)
+		return (ft_free(dest), NULL);
+	i = 0;
+	j = 0;
+	while (str[i] != '\n' || str[i] != '\0')
+	{
+		dest[i] = str[i];
+		i++;
+	}
+	dest[i] = '\n';
+	i++;
+	while (str)
+		str[j++] = str[i++];
+	str[j] = '\0';
+	return (dest);
+}
+
+int	checkchar(char *buffer)
+{
+	size_t i;
+
+	i = 0;
+	while(buffer)
+	{
+		if (buffer[i] == '\n' || buffer[i] == '\0')
+			return(1);
+		i++;
+	}
+	return(0);
+}
+
 int main(void)
 {
     int fd = open("coc9.txt", O_RDONLY);
@@ -73,13 +115,7 @@ int main(void)
     {
         perror("Error opening file");
         return 1;
-    }
-
-    // while ((str = get_next_line(fd)) != NULL)
-    // {
-    //     printf("%s", str);
-    //     free(str);
-    //
+	}
 	str = get_next_line(fd);
 	while (str)
 	{
@@ -90,7 +126,3 @@ int main(void)
     close(fd);
     return 0;
 }
-
-// char *str = "";
-
-// printf("%s\n", str);
