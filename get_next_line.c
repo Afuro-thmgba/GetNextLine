@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/14 20:54:34 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/14 22:40:32 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,14 @@ char	*get_next_line(int fd)
 	while(1)
 	{
 		bite_read = read (fd, buffer, BUFFER_SIZE);
+		buffer[bite_read] = '\0';
 		if (bite_read == 0 && ft_strlen(str) == 0)
 			return (ft_free(buffer), ft_free(str), NULL);
 		if (str[0] == '\0')
 			ft_buffertostr(str, buffer);
-		if (checkchar(buffer) == 1)
+		if (checkchar(buffer) == 1 || bite_read == 0)
 		{
+			str = ft_strjoin(str, buffer);
 			dest = ft_keeptherest(str);
 			return (ft_free(buffer), dest);
 		}
@@ -83,7 +85,8 @@ char *ft_keeptherest(char *str)
 		dest[i] = str[i];
 		i++;
 	}
-	dest[i] = '\n';
+	if (str[i] == '\n')
+		dest[i++] = '\n';
 	while (str[i])
 		str[j++] = str[i++];
 	str[j] = '\0';
