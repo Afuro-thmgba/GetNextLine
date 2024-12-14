@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:09:05 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/14 19:08:45 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/14 20:34:52 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	y = 0;
-	dest = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
+	dest = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
 	if (!dest)
 		return (NULL);
 	while (s1[i])
@@ -46,9 +46,30 @@ char	*ft_strjoin(char *s1, char *s2)
 		y++;
 	}
 	dest[i] = '\0';
+	s2[0] = '\0';
 	ft_free(s1);
-	ft_free(s2);
 	return (dest);
+}
+
+void	*ft_calloc( size_t nmemb, size_t size)
+{
+	char	*array;
+	size_t	i;
+
+	i = 0;
+	if (nmemb == 0 || size == 0)
+		return (malloc(0));
+	if (nmemb > SIZE_MAX / size)
+		return (NULL);
+	array = malloc(size * nmemb);
+	if (!array)
+		return (NULL);
+	while(array[i])
+	{
+		array[i] = '\0';
+		i++;
+	}
+	return (array);
 }
 
 

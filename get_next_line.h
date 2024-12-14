@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:03:28 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/14 19:33:15 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/14 20:30:24 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ void 	ft_free(char *str);
 void 	ft_buffertostr(char *str, char* buffer);
 char 	*ft_keeptherest(char *str);
 int		checkchar(char *buffer);
+void	*ft_calloc( size_t nmemb, size_t size);
 
 #endif

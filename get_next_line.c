@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/14 19:52:28 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/14 20:54:34 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@ char	*get_next_line(int fd)
 	char		*dest;
 	int			bite_read;
 
-	str = malloc(BUFFER_SIZE * sizeof(char) + 1);
+	if (!str)
+		str = calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (!str)
 		return (ft_free(str), NULL);
-	buffer = malloc(BUFFER_SIZE * sizeof(char) + 1);
+	buffer = calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (!buffer)
 		return (ft_free(str), NULL);
 	while(1)
 	{
 		bite_read = read (fd, buffer, BUFFER_SIZE);
-		buffer[bite_read] = '\0';
 		if (bite_read == 0 && ft_strlen(str) == 0)
 			return (ft_free(buffer), ft_free(str), NULL);
 		if (str[0] == '\0')
@@ -37,12 +37,10 @@ char	*get_next_line(int fd)
 		if (checkchar(buffer) == 1)
 		{
 			dest = ft_keeptherest(str);
-			return (dest);
+			return (ft_free(buffer), dest);
 		}
-		if (buffer)
-			str = ft_strjoin(str, buffer);
+		str = ft_strjoin(str, buffer);
 	}
-	
 }
 
 void ft_free(char *str)
@@ -66,6 +64,7 @@ void ft_buffertostr(char *str, char* buffer)
 		i++;
 	}
 	str[i] = '\0';
+	buffer[0] = '\0';
 }
 
 char *ft_keeptherest(char *str)
@@ -74,19 +73,18 @@ char *ft_keeptherest(char *str)
 	size_t	i;
 	size_t	j;
 	
-	dest = malloc(sizeof(char) * ft_strlen(str) + 1);
+	dest = calloc((ft_strlen(str) + 1), sizeof(char));
 	if (!dest)
 		return (ft_free(dest), NULL);
 	i = 0;
 	j = 0;
-	while (str[i] != '\n' || str[i] != '\0')
+	while (str[i] != '\n' && str[i] != '\0')
 	{
 		dest[i] = str[i];
 		i++;
 	}
 	dest[i] = '\n';
-	i++;
-	while (str)
+	while (str[i])
 		str[j++] = str[i++];
 	str[j] = '\0';
 	return (dest);
@@ -97,9 +95,9 @@ int	checkchar(char *buffer)
 	size_t i;
 
 	i = 0;
-	while(buffer)
+	while(buffer[i])
 	{
-		if (buffer[i] == '\n' || buffer[i] == '\0')
+		if (buffer[i] == '\n')
 			return(1);
 		i++;
 	}
