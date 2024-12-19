@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:09:05 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/14 22:18:53 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/19 00:59:07 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,16 @@ void	*ft_calloc( size_t nmemb, size_t size)
 	array = malloc(size * nmemb);
 	if (!array)
 		return (NULL);
-	while(array[i])
+	while(i < nmemb)
 	{
 		array[i] = '\0';
 		i++;
 	}
 	return (array);
 }
+
+
+
 
 
 

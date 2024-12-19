@@ -6,12 +6,11 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/14 22:40:32 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/19 01:18:10 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
 
 char	*get_next_line(int fd)
 {
@@ -21,16 +20,13 @@ char	*get_next_line(int fd)
 	int			bite_read;
 
 	if (!str)
-		str = calloc((BUFFER_SIZE + 1), sizeof(char));
-	if (!str)
-		return (ft_free(str), NULL);
-	buffer = calloc((BUFFER_SIZE + 1), sizeof(char));
-	if (!buffer)
-		return (ft_free(str), NULL);
-	while(1)
+		str = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
+	buffer = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
+	if (!buffer && !str)
+		return (ft_free(str), ft_free(buffer), NULL);
+	while (1)
 	{
 		bite_read = read (fd, buffer, BUFFER_SIZE);
-		buffer[bite_read] = '\0';
 		if (bite_read == 0 && ft_strlen(str) == 0)
 			return (ft_free(buffer), ft_free(str), NULL);
 		if (str[0] == '\0')
@@ -45,21 +41,20 @@ char	*get_next_line(int fd)
 	}
 }
 
-void ft_free(char *str)
+void	ft_free(char *str)
 {
-	if (str)
+	if (str != NULL)
 	{
 		free(str);
 		str = NULL;
 	}
 }
 
-void ft_buffertostr(char *str, char* buffer)
+void	ft_buffertostr(char *str, char *buffer)
 {
 	size_t	i;
 
 	i = 0;
-
 	while (buffer[i])
 	{
 		str[i] = buffer[i];
@@ -69,13 +64,13 @@ void ft_buffertostr(char *str, char* buffer)
 	buffer[0] = '\0';
 }
 
-char *ft_keeptherest(char *str)
+char	*ft_keeptherest(char *str)
 {
-	char *dest;
+	char	*dest;
 	size_t	i;
 	size_t	j;
-	
-	dest = calloc((ft_strlen(str) + 1), sizeof(char));
+
+	dest = ft_calloc((ft_strlen(str) + 1), sizeof(char));
 	if (!dest)
 		return (ft_free(dest), NULL);
 	i = 0;
@@ -95,13 +90,13 @@ char *ft_keeptherest(char *str)
 
 int	checkchar(char *buffer)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
-	while(buffer[i])
+	while (buffer[i])
 	{
 		if (buffer[i] == '\n')
-			return(1);
+			return (1);
 		i++;
 	}
 	return(0);
