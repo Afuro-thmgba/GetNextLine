@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/19 01:18:10 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/19 01:51:56 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 char	*get_next_line(int fd)
 {
-	char static	*str = NULL;
+	static char	*str = NULL;
 	char		*buffer;
 	char		*dest;
 	int			bite_read;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (ft_free(str), NULL);
 	if (!str)
 		str = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	buffer = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
@@ -27,7 +29,7 @@ char	*get_next_line(int fd)
 	while (1)
 	{
 		bite_read = read (fd, buffer, BUFFER_SIZE);
-		if (bite_read == 0 && ft_strlen(str) == 0)
+		if ((bite_read == 0 && ft_strlen(str) == 0) || bite_read == -1)
 			return (ft_free(buffer), ft_free(str), NULL);
 		if (str[0] == '\0')
 			ft_buffertostr(str, buffer);
@@ -99,7 +101,7 @@ int	checkchar(char *buffer)
 			return (1);
 		i++;
 	}
-	return(0);
+	return (0);
 }
 
 int main(void)

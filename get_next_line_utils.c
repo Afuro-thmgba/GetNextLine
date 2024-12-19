@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:09:05 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/19 00:59:07 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/19 01:27:31 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ size_t	ft_strlen(const char *s)
 		i++;
 	return (i);
 }
-
 
 char	*ft_strjoin(char *s1, char *s2)
 {
@@ -64,20 +63,10 @@ void	*ft_calloc( size_t nmemb, size_t size)
 	array = malloc(size * nmemb);
 	if (!array)
 		return (NULL);
-	while(i < nmemb)
+	while (i < nmemb)
 	{
 		array[i] = '\0';
 		i++;
 	}
 	return (array);
 }
-
-
-
-
-
-
-
-
-
-
