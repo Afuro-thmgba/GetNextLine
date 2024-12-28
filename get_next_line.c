@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/19 01:51:56 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/28 18:47:26 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*get_next_line(int fd)
 	int			bite_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (ft_free(str), NULL);
+		return (NULL);
 	if (!str)
 		str = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	buffer = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
@@ -107,6 +107,7 @@ int	checkchar(char *buffer)
 int main(void)
 {
     int fd = open("coc9.txt", O_RDONLY);
+/* 	int fd = -1; */
     char *str;
 
     if (fd == -1)
