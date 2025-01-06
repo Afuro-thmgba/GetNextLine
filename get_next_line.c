@@ -1,12 +1,12 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*                                                                            ²
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/06 15:02:54 by afuro            ###   ########.fr       */
+/*   Updated: 2025/01/06 15:05:29 by afuro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,14 @@
 
 char	*get_next_line(int fd)
 {
-	
+	static char *str = NULL;
+	char		*buffer;
+	char		line;
+	ssize_t		bytesread;
+
+	if (!str)
+		str = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 }
 
 ft_free(void *str)
@@ -24,7 +31,6 @@ ft_free(void *str)
 		free(str);
 		str = NULL;
 	}
-	er
 }
 
 /* int main(void)
