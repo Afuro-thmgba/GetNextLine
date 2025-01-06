@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
+/*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/06 12:22:27 by thmgba           ###   ########.fr       */
+/*   Updated: 2025/01/06 15:02:54 by afuro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ ft_free(void *str)
 		free(str);
 		str = NULL;
 	}
+	er
 }
 
 /* int main(void)
