@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:03:28 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/28 17:36:01 by thmgba           ###   ########.fr       */
+/*   Updated: 2025/01/06 12:21:17 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(const char *s);
 void	ft_free(char *str);
-void	ft_buffertostr(char *str, char *buffer);
-char	*ft_keeptherest(char *str);
-int		checkchar(char *buffer);
 void	*ft_calloc( size_t nmemb, size_t size);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:09:05 by thmgba            #+#    #+#             */
-/*   Updated: 2024/12/19 01:27:31 by thmgba           ###   ########.fr       */
+/*   Updated: 2024/12/29 16:28:39 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *s)
 	int	i;
 
 	i = 0;
+	if (s == NULL)
+		return (0);
 	while (s[i] != '\0')
 		i++;
 	return (i);
