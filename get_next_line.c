@@ -22,9 +22,11 @@ char	*get_next_line(int fd)
 	if (!str)
 		str = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!str || !buffer)
+		return(ft_free(str, buffer), NULL );
 }
 
-ft_free(void *str)
+ft_free(void *s1, void *s2)
 {
 	if (str)
 	{
