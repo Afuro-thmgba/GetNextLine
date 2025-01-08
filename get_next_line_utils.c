@@ -6,7 +6,7 @@
 /*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:09:05 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/08 13:04:22 by afuro            ###   ########.fr       */
+/*   Updated: 2025/01/08 16:00:32 by afuro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ char	*ft_strjoin(char *s1, char *s2)
 		y++;
 	}
 	dest[i] = '\0';
-	s2[0] = '\0';
-	ft_free(s1, NULL);
+	jeyfree(&s2);
+	jeyfree(&s1);
 	return (dest);
 }
 
@@ -92,7 +92,7 @@ int	checkendchar(char	*str)
 
 	i = 0;
 	bool = 0;
-	while (str[i] != '\0')
+	while (str[i] != '\0' && bool == 0)
 	{
 		i++;
 		if (str[i] == '\n')

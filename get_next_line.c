@@ -6,7 +6,7 @@
 /*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:19:41 by afuro             #+#    #+#             */
-/*   Updated: 2025/01/08 13:04:41 by afuro            ###   ########.fr       */
+/*   Updated: 2025/01/08 16:05:04 by afuro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,34 +22,31 @@ char	*get_next_line(int fd)
 
 	if (!str)
 		str = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!str)
+		return (jeyfree(&str), NULL);
 	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if ((!str || !buffer) || fd == -1)
-		return (ft_free(str, buffer), NULL);
+	if (!buffer || fd == -1 || BUFFER_SIZE == 0)
+		return (jeyfree(&str), jeyfree(&buffer), NULL);
 	while (1)
 	{
 		bytesread = read(fd, buffer, BUFFER_SIZE);
-		if (bytesread == 0)
-			return (ft_free(str, buffer), NULL);
-		endline = bufftostr(buffer, str);
+		if (bytesread == 0 && bytesread == -1)
+			return (jeyfree(&str), jeyfree(&buffer), NULL);
+		endline = bufftostr(buffer, &str);
 		if (endline == 1)
 		{
 			line = justoneline(str);
-			return (ft_free(str, buffer), line);
+			return (jeyfree(&buffer), line);
 		}
 	}
 }
 
-int	bufftostr(char *buffer, char *str)
+int	bufftostr(char *buffer, char **str)
 {
-	if (str[0] == '\0')
-		ft_strcpy(buffer, str);
-	else
-	{
-		str = ft_strjoin(str, buffer);
-		buffer[0] = '\0';
-		if (checkendchar(str) == 1)
-			return (1);
-	}
+	*str = ft_strjoin(*str, buffer);
+	buffer[0] = '\0';
+	if (checkendchar(*str) == 1)
+		return (1);
 	return (0);
 }
 
@@ -97,16 +94,25 @@ void	keeptherest(char *str)
 	str[j] = '\0';
 }
 
-void	ft_free(void *s1, void *s2)
+
+int main()
 {
-	if (s1)
-	{
-		free(s1);
-		s1 = NULL;
-	}
-	if (s2)
-	{
-		free(s2);
-		s2 = NULL;
-	}
+    int fd;
+    char *line;
+
+    fd = open("coc9.txt", O_RDONLY);
+    if (fd == -1)
+    {
+        perror("Error opening file");
+        return (1);
+    }
+
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        printf("%s", line);
+        jeyfree(&line);
+    }
+
+    close(fd);
+    return (0);
 }
