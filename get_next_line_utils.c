@@ -6,7 +6,7 @@
 /*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:09:05 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/08 12:08:16 by afuro            ###   ########.fr       */
+/*   Updated: 2025/01/08 13:04:22 by afuro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	dest[i] = '\0';
 	s2[0] = '\0';
-	ft_free(s1);
+	ft_free(s1, NULL);
 	return (dest);
 }
 
@@ -73,14 +73,32 @@ void	*ft_calloc( size_t nmemb, size_t size)
 	return (array);
 }
 
-void	ft_bzero(void *s, size_t n)
+void	ft_strcpy(char *s1, char *s2)
 {
-	unsigned char	*ptr;
+	int	i;
 
-	ptr = (unsigned char *)s;
-	while (n--)
+	i = 0;
+	while (s1[i])
 	{
-		*ptr = 0;
-		ptr++;
+		s2[i] = s1[i];
+		i++;
 	}
+}
+
+int	checkendchar(char	*str)
+{
+	int	i;
+	int	bool;
+
+	i = 0;
+	bool = 0;
+	while (str[i] != '\0')
+	{
+		i++;
+		if (str[i] == '\n')
+			bool++;
+		if (str[i] != '\n' && str[i + 1] == '\0')
+			bool++;
+	}
+	return (bool);
 }

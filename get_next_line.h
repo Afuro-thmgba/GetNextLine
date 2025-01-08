@@ -6,7 +6,7 @@
 /*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:03:28 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/08 12:17:42 by afuro            ###   ########.fr       */
+/*   Updated: 2025/01/08 13:03:17 by afuro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	*ft_calloc( size_t nmemb, size_t size);
 void	ft_bzero(void *s, size_t n);
 int		bufftostr(char *buffer, char *str);
 char	*justoneline(char *str);
-void	*keeptherest(char *str);
+void	keeptherest(char *str);
+void	ft_strcpy(char *s1, char *s2);
+int		checkendchar(char	*str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:19:41 by afuro             #+#    #+#             */
-/*   Updated: 2025/01/08 12:23:25 by afuro            ###   ########.fr       */
+/*   Updated: 2025/01/08 13:04:41 by afuro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*get_next_line(int fd)
 {
 	static char	*str = NULL;
 	char		*buffer;
-	char		line;
+	char		*line;
 	int			endline;
 	ssize_t		bytesread;
 
@@ -29,7 +29,7 @@ char	*get_next_line(int fd)
 	{
 		bytesread = read(fd, buffer, BUFFER_SIZE);
 		if (bytesread == 0)
-			return (fr_free(str, buffer), NULL);
+			return (ft_free(str, buffer), NULL);
 		endline = bufftostr(buffer, str);
 		if (endline == 1)
 		{
@@ -46,7 +46,7 @@ int	bufftostr(char *buffer, char *str)
 	else
 	{
 		str = ft_strjoin(str, buffer);
-		ft_bzero(buffer, BUFFER_SIZE);
+		buffer[0] = '\0';
 		if (checkendchar(str) == 1)
 			return (1);
 	}
@@ -56,18 +56,16 @@ int	bufftostr(char *buffer, char *str)
 char	*justoneline(char *str)
 {
 	int		i;
-	int		j;
 	char	*line;
 
 	i = 0;
-	j = 0;
-	while (str[i] != '\0' & str[i] != '\n')
+	while (str[i] != '\0' && str[i] != '\n')
 		i++;
 	line = malloc((i + 1) * sizeof(char));
 	if (!line)
 		return (NULL);
 	i = 0;
-	while (str[i] != '\0' & str[i] != '\n')
+	while (str[i] != '\0' && str[i] != '\n')
 	{
 		line[i] = str[i];
 		i++;
@@ -80,7 +78,7 @@ char	*justoneline(char *str)
 	return (line);
 }
 
-void	*keeptherest(char *str)
+void	keeptherest(char *str)
 {
 	int	i;
 	int	j;
@@ -112,24 +110,3 @@ void	ft_free(void *s1, void *s2)
 		s2 = NULL;
 	}
 }
-
-/* int main(void)
-{
-    int fd = open("coc9.txt", O_RDONLY);
-
-    char *str;
-
-    if (fd == -1)
-    {
-        perror("Error opening file");
-        return 1;
-	}
-	str = get_next_line(fd);
-	while (str)
-	{
-		printf("%s", str);
-		str = get_next_line(fd);
-	}
-    close(fd);
-    return 0;
-} */
