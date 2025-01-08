@@ -1,12 +1,12 @@
 /* ************************************************************************** */
-/*                                                                            ²
+/*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/06 15:05:29 by afuro            ###   ########.fr       */
+/*   Created: 2025/01/08 12:19:41 by afuro             #+#    #+#             */
+/*   Updated: 2025/01/08 12:23:25 by afuro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*get_next_line(int fd)
 {
-	static char *str= NULL;
+	static char	*str = NULL;
 	char		*buffer;
 	char		line;
 	int			endline;
@@ -24,20 +24,19 @@ char	*get_next_line(int fd)
 		str = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if ((!str || !buffer) || fd == -1)
-		return(ft_free(str, buffer), NULL );
+		return (ft_free(str, buffer), NULL);
 	while (1)
 	{
 		bytesread = read(fd, buffer, BUFFER_SIZE);
 		if (bytesread == 0)
 			return (fr_free(str, buffer), NULL);
-		endline = bufftostr(buffer, str); //met le contenue du buffer a la suite de str et vide le buffer, retourne 1 si il y a un character de fin de fichier/ligne sinon 0;
+		endline = bufftostr(buffer, str);
 		if (endline == 1)
 		{
-			line = justoneline(str); //copie les characthere de str dans line jusquau charactere de fin inclu, et met ce qu il y a apres la fin au debut de str;
+			line = justoneline(str);
 			return (ft_free(str, buffer), line);
 		}
 	}
-
 }
 
 int	bufftostr(char *buffer, char *str)
@@ -47,14 +46,14 @@ int	bufftostr(char *buffer, char *str)
 	else
 	{
 		str = ft_strjoin(str, buffer);
-		ft_bzero(buffer);
+		ft_bzero(buffer, BUFFER_SIZE);
 		if (checkendchar(str) == 1)
-			return(1);
+			return (1);
 	}
-	return(0);
+	return (0);
 }
 
-char *justoneline(char *str)
+char	*justoneline(char *str)
 {
 	int		i;
 	int		j;
@@ -62,24 +61,23 @@ char *justoneline(char *str)
 
 	i = 0;
 	j = 0;
-
-	while(str[i] != '\0' & str[i] != '\n')
+	while (str[i] != '\0' & str[i] != '\n')
 		i++;
 	line = malloc((i + 1) * sizeof(char));
 	if (!line)
-		return(NULL);
+		return (NULL);
 	i = 0;
-	while(str[i] != '\0' & str[i] != '\n')
+	while (str[i] != '\0' & str[i] != '\n')
 	{
 		line[i] = str[i];
 		i++;
 	}
 	if (str[i] == '\0')
 		line[i] = '\0';
-	else if(str[i] == '\n')
+	else if (str[i] == '\n')
 		line[i] = '\n';
 	keeptherest(str);
-	return(line);
+	return (line);
 }
 
 void	*keeptherest(char *str)
@@ -89,10 +87,10 @@ void	*keeptherest(char *str)
 
 	i = 0;
 	j = 0;
-	while(str[i] != '\0' && str[i] != '\n')
+	while (str[i] != '\0' && str[i] != '\n')
 		i++;
 	i++;
-	while(str[i] != '\0')
+	while (str[i] != '\0')
 	{
 		str[j] = str[i];
 		j++;
@@ -101,7 +99,7 @@ void	*keeptherest(char *str)
 	str[j] = '\0';
 }
 
-ft_free(void *s1, void *s2)
+void	ft_free(void *s1, void *s2)
 {
 	if (s1)
 	{

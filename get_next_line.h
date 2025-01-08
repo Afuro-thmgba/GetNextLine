@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
+/*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:03:28 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/06 12:21:17 by thmgba           ###   ########.fr       */
+/*   Updated: 2025/01/08 12:17:42 by afuro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@
 char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(const char *s);
-void	ft_free(char *str);
+void	ft_free(void *s1, void *s2);
 void	*ft_calloc( size_t nmemb, size_t size);
+void	ft_bzero(void *s, size_t n);
+int		bufftostr(char *buffer, char *str);
+char	*justoneline(char *str);
+void	*keeptherest(char *str);
 
 #endif
