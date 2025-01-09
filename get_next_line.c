@@ -3,116 +3,135 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/08 12:19:41 by afuro             #+#    #+#             */
-/*   Updated: 2025/01/08 16:05:04 by afuro            ###   ########.fr       */
+/*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
+/*   Updated: 2025/01/09 16:24:12 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+static int	appendline(char **s, char **line)
+{
+	int		len;
+	char	*tmp;
+
+	len = 0;
+	while ((*s)[len] != '\n' && (*s)[len] != '\0')
+		len++;
+	if ((*s)[len] == '\n')
+	{
+		*line = ft_strsub(*s, 0, len);
+		tmp = ft_strdup(&((*s)[len + 1]));
+		free(*s);
+		*s = tmp;
+		if ((*s)[0] == '\0')
+			ft_strdel(s);
+	}
+	else
+	{
+		*line = ft_strdup(*s);
+		ft_strdel(s);
+	}
+	return (1);
+}
+
+static int	output(char **s, char **line, int ret, int fd)
+{
+	if (ret < 0)
+		return (-1);
+	else if (ret == 0 && s[fd] == NULL)
+		return (0);
+	else
+		return (appendline(&s[fd], &line));
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	size_t	i;
+	size_t	y;
+	char	*dest;
+
+	i = 0;
+	y = 0;
+	dest = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
+	if (!dest)
+		return (NULL);
+	while (s1[i])
+	{
+		dest[i] = s1[i];
+		i++;
+	}
+	while (s2[y])
+	{
+		dest[i] = s2[y];
+		i++;
+		y++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+void	*ft_calloc( size_t nmemb, size_t size)
+{
+	void	*array;
+
+	if (nmemb == 0 || size == 0)
+		return (malloc(0));
+	if (nmemb > SIZE_MAX / size)
+		return (NULL);
+	array = malloc(size * nmemb);
+	if (!array)
+		return (NULL);
+	ft_bzero(array, (size * nmemb));
+	return (array);
+}
+
 char	*get_next_line(int fd)
 {
-	static char	*str = NULL;
-	char		*buffer;
+	int			ret;
+	static char	*s[FD_SIZE];
+	char		buff[BUFFER_SIZE + 1];
+	char		*tmp;
 	char		*line;
-	int			endline;
-	ssize_t		bytesread;
 
-	if (!str)
-		str = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (!str)
-		return (jeyfree(&str), NULL);
-	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (!buffer || fd == -1 || BUFFER_SIZE == 0)
-		return (jeyfree(&str), jeyfree(&buffer), NULL);
-	while (1)
+	if (fd < 0 || line == NULL)
+		return (-1);
+	while ((ret = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
-		bytesread = read(fd, buffer, BUFFER_SIZE);
-		if (bytesread == 0 && bytesread == -1)
-			return (jeyfree(&str), jeyfree(&buffer), NULL);
-		endline = bufftostr(buffer, &str);
-		if (endline == 1)
+		buff[ret] = '\0';
+		if (s[fd] == NULL)
+			s[fd] = ft_strdup(buff);
+		else
 		{
-			line = justoneline(str);
-			return (jeyfree(&buffer), line);
+			tmp = ft_strjoin(s[fd], buff);
+			free(s[fd]);
+			s[fd] = tmp;
 		}
+		if (ft_strchr(s[fd], '\n'))
+			break ;
 	}
+	return (output(s, &line, ret, fd), line);
 }
 
-int	bufftostr(char *buffer, char **str)
+/* int main(void)
 {
-	*str = ft_strjoin(*str, buffer);
-	buffer[0] = '\0';
-	if (checkendchar(*str) == 1)
-		return (1);
-	return (0);
-}
+    int fd = open("coc9.txt", O_RDONLY);
 
-char	*justoneline(char *str)
-{
-	int		i;
-	char	*line;
+    char *str;
 
-	i = 0;
-	while (str[i] != '\0' && str[i] != '\n')
-		i++;
-	line = malloc((i + 1) * sizeof(char));
-	if (!line)
-		return (NULL);
-	i = 0;
-	while (str[i] != '\0' && str[i] != '\n')
-	{
-		line[i] = str[i];
-		i++;
-	}
-	if (str[i] == '\0')
-		line[i] = '\0';
-	else if (str[i] == '\n')
-		line[i] = '\n';
-	keeptherest(str);
-	return (line);
-}
-
-void	keeptherest(char *str)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (str[i] != '\0' && str[i] != '\n')
-		i++;
-	i++;
-	while (str[i] != '\0')
-	{
-		str[j] = str[i];
-		j++;
-		i++;
-	}
-	str[j] = '\0';
-}
-
-
-int main()
-{
-    int fd;
-    char *line;
-
-    fd = open("coc9.txt", O_RDONLY);
     if (fd == -1)
     {
         perror("Error opening file");
-        return (1);
-    }
-
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("%s", line);
-        jeyfree(&line);
-    }
-
+        return 1;
+	}
+	str = get_next_line(fd);
+	while (str)
+	{
+		printf("%s", str);
+		str = get_next_line(fd);
+	}
     close(fd);
-    return (0);
-}
+    return 0;
+} */

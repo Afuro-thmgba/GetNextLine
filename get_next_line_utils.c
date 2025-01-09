@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:09:05 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/08 16:00:32 by afuro            ###   ########.fr       */
+/*   Updated: 2025/01/09 16:48:07 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,81 +24,61 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strdup(const char *s)
 {
-	size_t	i;
-	size_t	y;
+	char	*str;
+	size_t	len;
+
+	len = ft_strlen(s) + 1;
+	str = (char *)malloc(len * sizeof(char));
+	if (!str)
+		return (0);
+	len = ft_strlcpy(str, s, len);
+	return (str);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s)
+	{
+		if (*s == (unsigned char)c)
+			return ((char *)s);
+		s++;
+	}
+	if ((unsigned char)c == '\0')
+		return ((char *)s + ft_strlen((char *)s));
+	return (0);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
 	char	*dest;
+	size_t	i;
 
 	i = 0;
-	y = 0;
-	dest = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
-	if (!dest)
+	if (s == NULL)
 		return (NULL);
-	while (s1[i])
+	if (start >= ft_strlen(s))
+		return (ft_strdup(""));
+	if (len > ft_strlen(s) - start)
+		len = ft_strlen(s) - start;
+	dest = malloc((len + 1) * sizeof(char));
+	if (dest == NULL)
+		return (NULL);
+	while (i < len)
 	{
-		dest[i] = s1[i];
+		dest[i] = s[i + start];
 		i++;
-	}
-	while (s2[y])
-	{
-		dest[i] = s2[y];
-		i++;
-		y++;
 	}
 	dest[i] = '\0';
-	jeyfree(&s2);
-	jeyfree(&s1);
 	return (dest);
 }
 
-void	*ft_calloc( size_t nmemb, size_t size)
+void ft_strdel(char **s)
 {
-	char	*array;
-	size_t	i;
-
-	i = 0;
-	if (nmemb == 0 || size == 0)
-		return (malloc(0));
-	if (nmemb > SIZE_MAX / size)
-		return (NULL);
-	array = malloc(size * nmemb);
-	if (!array)
-		return (NULL);
-	while (i < nmemb)
-	{
-		array[i] = '\0';
-		i++;
-	}
-	return (array);
-}
-
-void	ft_strcpy(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i])
-	{
-		s2[i] = s1[i];
-		i++;
-	}
-}
-
-int	checkendchar(char	*str)
-{
-	int	i;
-	int	bool;
-
-	i = 0;
-	bool = 0;
-	while (str[i] != '\0' && bool == 0)
-	{
-		i++;
-		if (str[i] == '\n')
-			bool++;
-		if (str[i] != '\n' && str[i + 1] == '\0')
-			bool++;
-	}
-	return (bool);
+    if (s && *s)
+    {
+        free(*s);
+        *s = NULL;
+    }
 }

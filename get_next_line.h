@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afuro <afuro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:03:28 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/08 16:00:58 by afuro            ###   ########.fr       */
+/*   Updated: 2025/01/09 16:48:39 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,19 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 13
-# endif
+#endif
 
-char	*get_next_line(int fd);
-char	*ft_strjoin(char *s1, char *s2);
-size_t	ft_strlen(const char *s);
-void	jeyfree(char **ptr);
-void	*ft_calloc( size_t nmemb, size_t size);
-void	ft_bzero(void *s, size_t n);
-int		bufftostr(char *buffer, char **str);
-char	*justoneline(char *str);
-void	keeptherest(char *str);
-void	ft_strcpy(char *s1, char *s2);
-int		checkendchar(char	*str);
+# ifndef FD_SIZE
+#  define FD_SIZE 1024
+#endif
+
+char		*ft_strjoin(char *s1, char *s2);
+void		*ft_calloc( size_t nmemb, size_t size);
+char		*get_next_line(int fd);
+size_t		ft_strlen(const char *s);
+char		*ft_strdup(const char *s);
+char		*ft_strchr(const char *s, int c);
+char		*ft_strsub(char const *s, unsigned int start, size_t len);
+void		ft_strdel(char **s);
 
 #endif
