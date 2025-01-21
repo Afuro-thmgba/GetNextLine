@@ -6,132 +6,131 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/09 16:24:12 by thmgba           ###   ########.fr       */
+/*   Updated: 2025/01/21 11:15:56 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	appendline(char **s, char **line)
+char	*ft_join_free(char *file, char *buffer)
 {
-	int		len;
-	char	*tmp;
+	char	*placeholder;
 
-	len = 0;
-	while ((*s)[len] != '\n' && (*s)[len] != '\0')
-		len++;
-	if ((*s)[len] == '\n')
-	{
-		*line = ft_strsub(*s, 0, len);
-		tmp = ft_strdup(&((*s)[len + 1]));
-		free(*s);
-		*s = tmp;
-		if ((*s)[0] == '\0')
-			ft_strdel(s);
-	}
-	else
-	{
-		*line = ft_strdup(*s);
-		ft_strdel(s);
-	}
-	return (1);
+	placeholder = ft_strjoin(file, buffer);
+	free(file);
+	return (placeholder);
 }
 
-static int	output(char **s, char **line, int ret, int fd)
+char	*ft_read_following(int fd, char *file)
 {
-	if (ret < 0)
-		return (-1);
-	else if (ret == 0 && s[fd] == NULL)
-		return (0);
-	else
-		return (appendline(&s[fd], &line));
+	char	*buffer;
+	int		bytes;
+
+	if (!file)
+		file = ft_calloc(1, 1);
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	bytes = 1;
+	while (bytes > 0)
+	{
+		bytes = read(fd, buffer, BUFFER_SIZE);
+		if (bytes == -1)
+			return (free(file), free(buffer), NULL);
+		buffer[bytes] = 0;
+		file = ft_join_free(file, buffer);
+		if (ft_strchr(file, '\n'))
+			break ;
+	}
+	free (buffer);
+	if (bytes == 0 && file[0] == '\0')
+		return (free(file), NULL);
+	return (file);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*get_oline(char *file)
 {
-	size_t	i;
-	size_t	y;
-	char	*dest;
+	int		i;
+	char	*str;
 
 	i = 0;
-	y = 0;
-	dest = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
-	if (!dest)
+	if (!file)
 		return (NULL);
-	while (s1[i])
+	while (file[i] && file[i] != '\n')
+		i++;
+	str = ft_calloc(i + 2, sizeof(char));
+	i = 0;
+	while (file[i] && file[i] != '\n')
 	{
-		dest[i] = s1[i];
+		str[i] = file[i];
 		i++;
 	}
-	while (s2[y])
-	{
-		dest[i] = s2[y];
-		i++;
-		y++;
-	}
-	dest[i] = '\0';
-	return (dest);
+	if (file[i] && file[i] == '\n')
+		str[i++] = '\n';
+	return (str);
 }
 
-void	*ft_calloc( size_t nmemb, size_t size)
+char	*old_line_remove(char *file)
 {
-	void	*array;
+	int		i;
+	int		j;
+	char	*str;
 
-	if (nmemb == 0 || size == 0)
-		return (malloc(0));
-	if (nmemb > SIZE_MAX / size)
+	i = 0;
+	j = 0;
+	while (file[i] && file[i] != '\n')
+		i++;
+	if (!file[i])
+	{
+		free(file);
 		return (NULL);
-	array = malloc(size * nmemb);
-	if (!array)
+	}
+	str = ft_calloc((ft_strlen(file) - i + 1), sizeof(*file));
+	if (!str)
 		return (NULL);
-	ft_bzero(array, (size * nmemb));
-	return (array);
+	while (file[++i])
+		str[j++] = file[i];
+	str[j] = '\0';
+	free(file);
+	return (str);
 }
 
 char	*get_next_line(int fd)
 {
-	int			ret;
-	static char	*s[FD_SIZE];
-	char		buff[BUFFER_SIZE + 1];
-	char		*tmp;
-	char		*line;
+	static char	*file;
+	char		*file_displayed;
 
-	if (fd < 0 || line == NULL)
-		return (-1);
-	while ((ret = read(fd, buff, BUFFER_SIZE)) > 0)
-	{
-		buff[ret] = '\0';
-		if (s[fd] == NULL)
-			s[fd] = ft_strdup(buff);
-		else
-		{
-			tmp = ft_strjoin(s[fd], buff);
-			free(s[fd]);
-			s[fd] = tmp;
-		}
-		if (ft_strchr(s[fd], '\n'))
-			break ;
-	}
-	return (output(s, &line, ret, fd), line);
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	file = ft_read_following(fd, file);
+	if (!file)
+		return (NULL);
+	file_displayed = get_oline(file);
+	file = old_line_remove(file);
+	return (file_displayed);
 }
 
-/* int main(void)
+/*
+#include "get_next_line.h"
+#include <fcntl.h>
+#include <stdio.h>
+
+int main(void)
 {
-    int fd = open("coc9.txt", O_RDONLY);
+    int fd;
+    char *line;
 
-    char *str;
-
+    fd = open("coc9.txt", O_RDONLY);
     if (fd == -1)
     {
         perror("Error opening file");
-        return 1;
-	}
-	str = get_next_line(fd);
-	while (str)
-	{
-		printf("%s", str);
-		str = get_next_line(fd);
-	}
+        return (1);
+    }
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        printf("%s", line);
+        free(line);
+    }
     close(fd);
-    return 0;
-} */
+    return (0);
+}*/
