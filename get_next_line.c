@@ -6,7 +6,7 @@
 /*   By: thmgba <thmgba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:02:06 by thmgba            #+#    #+#             */
-/*   Updated: 2025/01/21 11:15:56 by thmgba           ###   ########.fr       */
+/*   Updated: 2025/01/22 15:59:14 by thmgba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,28 +109,3 @@ char	*get_next_line(int fd)
 	file = old_line_remove(file);
 	return (file_displayed);
 }
-
-/*
-#include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
-
-int main(void)
-{
-    int fd;
-    char *line;
-
-    fd = open("coc9.txt", O_RDONLY);
-    if (fd == -1)
-    {
-        perror("Error opening file");
-        return (1);
-    }
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("%s", line);
-        free(line);
-    }
-    close(fd);
-    return (0);
-}*/
